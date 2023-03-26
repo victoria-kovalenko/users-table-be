@@ -20,25 +20,22 @@ const app = express();
 app.use(cors());
 
 app.get('/', (req: any, res: any) => {
-  console.log(req.params);
-  res.send('hello world');
+  client.connect((err: any) => {
+    const collection = client.db("thinkmobiles_tt").collection("users");
+    if (!err) {
+      console.log('connect');
+    } else {
+      console.log(err);
+    }
 
-  res.end();
+    collection.find({}).toArray(function (err, docs) {
+      console.log("Found the following records");
+      res.send(docs);
+
+      res.end();
+    });
+  });
 });
-
-// const schema = {
-//   properties: {
-//     _id: 'string',
-//     name: 'string',
-//     email: 'string',
-//     phone: 'string',
-//     count: 'string',
-//     next: 'string',
-//   },
-//   primaryKey: '_id'
-// };
-
-// const monmodel = mongoose.model("users", schema);
 
 app.post('/users', express.json(), async (req: any, res: any) => {
   const data = {
@@ -50,19 +47,8 @@ app.post('/users', express.json(), async (req: any, res: any) => {
     next: req.body.next,
   };
 
-  // db.collection('users').insertOne(data, (err:any, result:any) => {
-  //   if (err) {
-  //     res.send({ 'error': 'An error has occurred' });
-
-  //     return;
-  //   }
-  // });
-
-  // res.status(204);
-  // res.end();
   client.connect((err: any) => {
     const collection = client.db("thinkmobiles_tt").collection("users");
-    // perform actions on the collection object
     if (!err) {
       console.log('connect');
     } else {
