@@ -47,7 +47,7 @@ app.get('/users/:userId', (req: any, res: any) => {
   });
 })
 
-app.post('/users', express.json(), async (req: any, res: any) => {
+app.post('/user', express.json(), async (req: any, res: any) => {
   const data = {
     id: req.body.id,
     name: req.body.name,
