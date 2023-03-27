@@ -41,12 +41,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var cors_1 = __importDefault(require("cors"));
+var mongodb_1 = require("mongodb");
 var _a = require('mongodb'), MongoClient = _a.MongoClient, ServerApiVersion = _a.ServerApiVersion;
 var uri = "mongodb+srv://victoriakovalenkojob:Vv0820132525@cluster0.svj5c27.mongodb.net/?retryWrites=true&w=majority";
 var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 client.connect(function (err) {
     var collection = client.db("thinkmobiles_tt").collection("users");
-    // perform actions on the collection object
     if (!err) {
         console.log('connect');
     }
@@ -56,23 +56,27 @@ client.connect(function (err) {
 });
 var app = express_1.default();
 app.use(cors_1.default());
-app.get('/', function (req, res) {
-    console.log(req.params);
-    res.send('hello world');
-    res.end();
+app.get('/users', function (req, res) {
+    client.connect(function (err) {
+        var collection = client.db("thinkmobiles_tt").collection("users");
+        collection.find({}).toArray(function (err, docs) {
+            console.log("Found the following records");
+            res.send(docs);
+            res.end();
+        });
+    });
 });
-// const schema = {
-//   properties: {
-//     _id: 'string',
-//     name: 'string',
-//     email: 'string',
-//     phone: 'string',
-//     count: 'string',
-//     next: 'string',
-//   },
-//   primaryKey: '_id'
-// };
-// const monmodel = mongoose.model("users", schema);
+app.get('/users/:userId', function (req, res) {
+    var userId = req.params.userId;
+    client.connect(function (err) {
+        var collection = client.db("thinkmobiles_tt").collection("users");
+        collection.find({ _id: mongodb_1.ObjectId(userId) }).toArray(function (err, docs) {
+            console.log("Found the following record");
+            res.send(docs);
+            res.end();
+        });
+    });
+});
 app.post('/users', express_1.default.json(), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var data;
     return __generator(this, function (_a) {
@@ -84,25 +88,9 @@ app.post('/users', express_1.default.json(), function (req, res) { return __awai
             count: req.body.count,
             next: req.body.next,
         };
-        // db.collection('users').insertOne(data, (err:any, result:any) => {
-        //   if (err) {
-        //     res.send({ 'error': 'An error has occurred' });
-        //     return;
-        //   }
-        // });
-        // res.status(204);
-        // res.end();
         client.connect(function (err) {
             var collection = client.db("thinkmobiles_tt").collection("users");
-            // perform actions on the collection object
-            if (!err) {
-                console.log('connect');
-            }
-            else {
-                console.log(err);
-            }
-            var db = client.db('thinkmobiles_tt');
-            db.collection('users').insertOne(data, function (err, result) {
+            collection.insertOne(data, function (err, result) {
                 if (err) {
                     res.send({ 'error': 'An error has occurred' });
                     return;
