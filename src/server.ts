@@ -14,6 +14,8 @@ client.connect((err: any) => {
 
 });
 
+const PORT = process.env.PORT || 3000;
+
 
 const app = express();
 
@@ -73,6 +75,6 @@ app.post('/users', express.json(), async (req: any, res: any) => {
 
 })
 
-app.listen(3000, () => {
-  console.log('http://localhost:3000/');
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}...`);
 });
