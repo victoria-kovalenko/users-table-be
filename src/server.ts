@@ -3,7 +3,7 @@ import cors from 'cors';
 import { ObjectId } from 'mongodb';
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://victoriakovalenkojob:Vv0820132525@cluster0.svj5c27.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+const client = new MongoClient(uri, { useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 client.connect((err: any) => {
   const collection = client.db("thinkmobiles_tt").collection("users");
   if (!err) {
