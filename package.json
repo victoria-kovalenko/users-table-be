@@ -8,7 +8,7 @@
     "npm": "6.14.15"
   },
   "scripts": {
-    "build": "tsc --",
+    "build": "tsc",
     "deploy": "gh-pages -d dist",
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpileOnly --ignore-watch node_modules src/shared/infra/http/server.ts",
     "start": "nodemon src/server.ts ",
