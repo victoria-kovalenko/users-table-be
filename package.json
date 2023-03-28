@@ -8,7 +8,7 @@
     "npm": "6.14.15"
   },
   "scripts": {
-    "build": "tsc --noResolve",
+    "build": "tsc --",
     "deploy": "gh-pages -d dist",
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpileOnly --ignore-watch node_modules src/shared/infra/http/server.ts",
     "start": "nodemon src/server.ts ",
@@ -16,7 +16,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@types/babel__traverse": "^7.18.3",
+    "@types/express-serve-static-core": "^4.17.33",
     "@types/mongoose": "^5.11.97",
+    "@types/whatwg-url": "^11.0.0",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
     "cors": "^2.8.5",
