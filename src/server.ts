@@ -21,8 +21,8 @@ const app = express();
 
 app.use(cors());
 
-app.get('/users', (req: any, res: any) => {
-  client.connect((err: any) => {
+app.get('/users', async (req: any, res: any) => {
+  await client.connect((err: any) => {
     const collection = client.db("thinkmobiles_tt").collection("users");
     collection.find({}).toArray(function (err, docs) {
       console.log("Found the following records");
@@ -33,10 +33,10 @@ app.get('/users', (req: any, res: any) => {
   });
 });
 
-app.get('/users/:userId', (req: any, res: any) => {
+app.get('/users/:userId', async (req: any, res: any) => {
   const { userId } = req.params;
 
-  client.connect((err: any) => {
+  await client.connect((err: any) => {
     const collection = client.db("thinkmobiles_tt").collection("users");
     collection.find({_id: ObjectId(userId)}).toArray(function (err, docs) {
       console.log("Found the following record");
@@ -57,7 +57,7 @@ app.post('/user', express.json(), async (req: any, res: any) => {
     next: req.body.next,
   };
 
-  client.connect((err: any) => {
+  await client.connect((err: any) => {
     const collection = client.db("thinkmobiles_tt").collection("users");
     collection.insertOne(data, (err: any, result: any) => {
     if (err) {
