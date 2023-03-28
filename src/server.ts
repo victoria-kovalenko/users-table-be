@@ -14,7 +14,7 @@ client.connect((err: any) => {
 
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3030 ;
 
 
 const app = express();
@@ -52,10 +52,9 @@ app.post('/user', express.json(), async (req: any, res: any) => {
   const data = {
     id: req.body.id,
     name: req.body.name,
+    surname: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
-    count: req.body.count,
-    next: req.body.next,
   };
 
   await client.connect((err: any) => {
@@ -67,9 +66,8 @@ app.post('/user', express.json(), async (req: any, res: any) => {
       return;
     }
   });
-
-  res.status(204);
-  res.end();
+    res.send(data);
+    res.end();
 
     client.close();
   });
