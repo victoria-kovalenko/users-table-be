@@ -27,7 +27,6 @@ app.get('/users', async (req: any, res: any) => {
     collection.find({}).toArray(function (err, docs) {
       console.log("Found the following records");
       res.send(docs);
-      console.log(docs);
 
       res.end();
     });
@@ -44,6 +43,37 @@ app.get('/users/:userId', async (req: any, res: any) => {
       res.send(docs);
 
       res.end();
+    });
+  });
+})
+
+app.patch('/users/:userId', express.json(), async (req: any, res: any) => {
+  const { userId } = req.params;
+  let count;
+  const data = {
+    title: req.body.title,
+    description: req.body.description,
+    start: req.body.start,
+    end: req.body.end,
+  };
+
+  await client.connect(async (err: any) => {
+    const collection = await client.db("thinkmobiles_tt").collection("users");
+    collection.find({ _id: ObjectId(userId) }).toArray(function (err, docs) {
+      let previousCount = 1;
+      if (docs[0] && docs[0].count != null) { // Check if docs[0] is defined and docs[0].count is not null or undefined
+        previousCount = 1 + (+docs[0].count);
+      }
+      const count = previousCount.toString();
+
+      collection.updateOne(
+        { _id: ObjectId(userId) },
+        { $set: { ...data, count } },
+        { upsert: true },
+        function (err, result) {
+          res.end();
+        }
+      );
     });
   });
 })
