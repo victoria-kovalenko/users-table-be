@@ -61,7 +61,7 @@ app.patch('/users/:userId', express.json(), async (req: any, res: any) => {
     const collection = await client.db("thinkmobiles_tt").collection("users");
     collection.find({ _id: ObjectId(userId) }).toArray(function (err, docs) {
       let previousCount = 1;
-      if (docs[0] && docs[0].count != null) { // Check if docs[0] is defined and docs[0].count is not null or undefined
+      if (docs[0] && docs[0].count != null) {
         previousCount = 1 + (+docs[0].count);
       }
       const count = previousCount.toString();
