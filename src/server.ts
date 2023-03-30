@@ -25,7 +25,6 @@ app.get('/users', async (req: any, res: any) => {
   await client.connect((err: any) => {
     const collection = client.db("thinkmobiles_tt").collection("users");
     collection.find({}).toArray(function (err, docs) {
-      console.log("Found the following records");
       res.send(docs);
 
       res.end();
@@ -39,7 +38,6 @@ app.get('/users/:userId', async (req: any, res: any) => {
   await client.connect((err: any) => {
     const collection = client.db("thinkmobiles_tt").collection("users");
     collection.find({_id: ObjectId(userId)}).toArray(function (err, docs) {
-      console.log("Found the following record");
       res.send(docs);
 
       res.end();
