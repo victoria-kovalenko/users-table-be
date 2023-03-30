@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -14,7 +25,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -43,8 +54,8 @@ var express_1 = __importDefault(require("express"));
 var cors_1 = __importDefault(require("cors"));
 var mongodb_1 = require("mongodb");
 var _a = require('mongodb'), MongoClient = _a.MongoClient, ServerApiVersion = _a.ServerApiVersion;
-var uri = "mongodb+srv://victoriakovalenkojob:Vv0820132525@cluster0.svj5c27.mongodb.net/?retryWrites=true&w=majority";
-var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+var uri = "mongodb+srv://victoriakovalenkojob:Vv0820132525@cluster0.svj5c27.mongodb.net/?retryWrites=true&w=majority" || process.env.MONGODB_URI;
+var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(function (err) {
     var collection = client.db("thinkmobiles_tt").collection("users");
     if (!err) {
@@ -54,55 +65,113 @@ client.connect(function (err) {
         console.log(err);
     }
 });
-var app = express_1.default();
-app.use(cors_1.default());
-app.get('/users', function (req, res) {
-    client.connect(function (err) {
-        var collection = client.db("thinkmobiles_tt").collection("users");
-        collection.find({}).toArray(function (err, docs) {
-            console.log("Found the following records");
-            res.send(docs);
-            res.end();
-        });
-    });
-});
-app.get('/users/:userId', function (req, res) {
-    var userId = req.params.userId;
-    client.connect(function (err) {
-        var collection = client.db("thinkmobiles_tt").collection("users");
-        collection.find({ _id: mongodb_1.ObjectId(userId) }).toArray(function (err, docs) {
-            console.log("Found the following record");
-            res.send(docs);
-            res.end();
-        });
-    });
-});
-app.post('/users', express_1.default.json(), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var data;
+var PORT = process.env.PORT || 3030;
+var app = (0, express_1.default)();
+app.use((0, cors_1.default)());
+app.get('/users', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        data = {
-            id: req.body.id,
-            name: req.body.name,
-            email: req.body.email,
-            phone: req.body.phone,
-            count: req.body.count,
-            next: req.body.next,
-        };
-        client.connect(function (err) {
-            var collection = client.db("thinkmobiles_tt").collection("users");
-            collection.insertOne(data, function (err, result) {
-                if (err) {
-                    res.send({ 'error': 'An error has occurred' });
-                    return;
-                }
-            });
-            res.status(204);
-            res.end();
-            client.close();
-        });
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, client.connect(function (err) {
+                    var collection = client.db("thinkmobiles_tt").collection("users");
+                    collection.find({}).toArray(function (err, docs) {
+                        res.send(docs);
+                        res.end();
+                    });
+                })];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
     });
 }); });
-app.listen(3000, function () {
-    console.log('http://localhost:3000/');
+app.get('/users/:userId', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userId;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                userId = req.params.userId;
+                return [4 /*yield*/, client.connect(function (err) {
+                        var collection = client.db("thinkmobiles_tt").collection("users");
+                        collection.find({ _id: (0, mongodb_1.ObjectId)(userId) }).toArray(function (err, docs) {
+                            res.send(docs);
+                            res.end();
+                        });
+                    })];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.patch('/users/:userId', express_1.default.json(), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userId, count, data;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                userId = req.params.userId;
+                data = {
+                    title: req.body.title,
+                    description: req.body.description,
+                    start: req.body.start,
+                    end: req.body.end,
+                };
+                return [4 /*yield*/, client.connect(function (err) { return __awaiter(void 0, void 0, void 0, function () {
+                        var collection;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, client.db("thinkmobiles_tt").collection("users")];
+                                case 1:
+                                    collection = _a.sent();
+                                    collection.find({ _id: (0, mongodb_1.ObjectId)(userId) }).toArray(function (err, docs) {
+                                        var previousCount = 1;
+                                        if (docs[0] && docs[0].count != null) {
+                                            previousCount = 1 + (+docs[0].count);
+                                        }
+                                        var count = previousCount.toString();
+                                        collection.updateOne({ _id: (0, mongodb_1.ObjectId)(userId) }, { $set: __assign(__assign({}, data), { count: count }) }, { upsert: true }, function (err, result) {
+                                            res.end();
+                                        });
+                                    });
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); })];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.post('/user', express_1.default.json(), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var data;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                data = {
+                    id: req.body.id,
+                    name: req.body.name,
+                    surname: req.body.name,
+                    email: req.body.email,
+                    phone: req.body.phone,
+                };
+                return [4 /*yield*/, client.connect(function (err) {
+                        var collection = client.db("thinkmobiles_tt").collection("users");
+                        collection.insertOne(data, function (err, result) {
+                            if (err) {
+                                res.send({ 'error': 'An error has occurred' });
+                                return;
+                            }
+                        });
+                        res.send(data);
+                        res.end();
+                        client.close();
+                    })];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.listen(PORT, function () {
+    console.log("Server listening on port ".concat(PORT, "..."));
 });
